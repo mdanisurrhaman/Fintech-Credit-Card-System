@@ -18,8 +18,8 @@ jobs:
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
-          username: ${{ secrets.anish }}
-          port: ${{ secrets.8000 }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /home/anish/Fintech-Credit-Card-System
