@@ -1,33 +1,26 @@
-name: Fintech Auto Deploy
+name: Deploy Fintech Project
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup SSH
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
-        chmod 600 ~/.ssh/id_ed25519
-        ssh-keyscan -H localhost >> ~/.ssh/known_hosts
-
-    - name: Deploy to localhost
-      run: |
-        ssh anish@localhost << 'EOF'
-        cd /home/anish/Fintech-Credit-Card-System
-        git pull origin main
-        source venv/bin/activate
-        pip install -r requirements.txt
-        python manage.py migrate
-        sudo systemctl restart gunicorn
-        EOF
-
+      - name: Deploy to Server via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.anish }}
+          port: ${{ secrets.8000 }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/anish/Fintech-Credit-Card-System
+            bash .scripts/deploy.sh
