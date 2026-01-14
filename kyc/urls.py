@@ -15,3 +15,4 @@ urlpatterns = [
     path("admin/kyc/reject/<int:kyc_id>/", AdminRejectionKYCAPIView.as_view()),
 ]
 
+
